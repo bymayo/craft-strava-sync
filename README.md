@@ -1,42 +1,40 @@
-# Strava Sync plugin for Craft CMS 3.x
+# Strava Sync Plugin for Craft CMS 3.x
 
-Connect to Strava with oAuth and sync activities etc to Craft CMS 
+Strava Sync is a Craft CMS plugin that lets you connect Strava with Craft CMS. Allowing users to login with Strava oAuth, get data from the API (E.g Athelete, activity, segment and route data) as well as sync data with Craft CMS via Strava webhooks.
 
-![Screenshot](resources/img/plugin-logo.png)
+https://plugins.craftcms.com/commerce-widgets
+
+## Features
+
+- Login via oAuth
+- Automatically fills profile data (First Name, Last Name, Profile Photo etc)
+- Map additonal athlete data to user fields
+- Pull data from the Strava API
+- Sync data directly in to Craft CMS via Webhooks (Soon)
 
 ## Requirements
 
-This plugin requires Craft CMS 3.0.0-beta.23 or later.
+- Craft CMS 3.x
+- Strava Account (With developer access)
 
-## Installation
+## Install
 
-To install the plugin, follow these instructions.
+- Install via the Plugin Store in the Craft Admin CP by searching for `Strava Sync`.
 
-1. Open your terminal and go to your Craft project:
+OR
 
-        cd /path/to/project
+- Install with Composer via `composer require bymayo/strava-sync` from your project directory
+- Install the plugin in the Craft Control Panel under `Settings > Plugins`
 
-2. Then tell Composer to load the plugin:
+## Configuration
 
-        composer require bymayo/strava-sync
+## Templating
 
-3. In the Control Panel, go to Settings → Plugins and click the “Install” button for Strava Sync.
+## Support
 
-## Strava Sync Overview
+If you have any issues (Surely not!) then I'll aim to reply to these as soon as possible. If it's a site-breaking-oh-no-what-has-happened moment, then hit me up on the Craft CMS Slack - @bymayo
 
--Insert text here-
-
-## Configuring Strava Sync
-
--Insert text here-
-
-## Using Strava Sync
-
--Insert text here-
-
-## Strava Sync Roadmap
-
-Some things to do, and ideas for potential features:
+## Roadmap
 
 * Release it
 
