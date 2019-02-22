@@ -1,0 +1,41 @@
+{
+    "name": "bymayo/strava-sync",
+    "description": "Connect to Strava with oAuth and sync activities etc to Craft CMS ",
+    "type": "craft-plugin",
+    "version": "1.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "strava sync"
+    ],
+    "support": {
+        "docs": "https://github.com/bymayo/strava-sync/blob/master/README.md",
+        "issues": "https://github.com/bymayo/strava-sync/issues"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "bymayo",
+            "homepage": "http://bymayo.co.uk"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.0.0-RC1",
+        "basvandorst/stravaphp": "^1.2"
+    },
+    "autoload": {
+        "psr-4": {
+          "bymayo\\stravasync\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Strava Sync",
+        "handle": "strava-sync",
+        "hasCpSettings": true,
+        "hasCpSection": false,
+        "changelogUrl": "https://raw.githubusercontent.com/bymayo/strava-sync/master/CHANGELOG.md",
+        "class": "bymayo\\stravasync\\StravaSync"
+    }
+}

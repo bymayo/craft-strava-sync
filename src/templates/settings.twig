@@ -1,0 +1,59 @@
+{% import "_includes/forms" as forms %}
+{% do view.registerAssetBundle("bymayo\\stravasync\\assetbundles\\stravasync\\StravaSyncAsset") %}
+
+{{ forms.textField({
+    label: 'Client ID',
+    id: 'clientId',
+    name: 'clientId',
+    required: true,
+    value: settings.clientId })
+}}
+
+{{ forms.textField({
+    label: 'Client Secret',
+    id: 'clientSecret',
+    name: 'clientSecret',
+    required: true,
+    value: settings.clientSecret })
+}}
+
+{{ forms.textField({
+    label: 'Login Redirect',
+    id: 'loginRedirect',
+    name: 'loginRedirect',
+    required: true,
+    value: settings.loginRedirect })
+}}
+
+{{ forms.textField({
+    label: 'Onboard Redirect',
+    id: 'onboardRedirect',
+    name: 'onboardRedirect',
+    instructions: 'No email address is provided from the Strava API. So you need to collect it before registering a user on a template.',
+    required: true,
+    value: settings.onboardRedirect })
+}}
+
+{% set groups = [
+   {
+      label: 'None',
+      value: ''
+   }
+] %}
+
+{% for group in craft.app.userGroups.getAllGroups() %}
+   {% set groups = groups | merge([
+      {
+         label: group.name,
+         value: group.id
+      }
+   ]) %}
+{% endfor %}
+
+{{ forms.selectField({
+     label: "Default User Group"|t('social'),
+     instructions: "The user group that Strava members will be added to by default.",
+     name: 'defaultUserGroup',
+     options: groups,
+     value: settings.defaultUserGroup,
+ }) }}
