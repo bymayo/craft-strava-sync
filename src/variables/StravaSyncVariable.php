@@ -2,7 +2,7 @@
 /**
  * Strava Sync plugin for Craft CMS 3.x
  *
- * Connect to Strava with oAuth and sync activities etc to Craft CMS 
+ * Connect to Strava with oAuth and sync activities etc to Craft CMS
  *
  * @link      http://bymayo.co.uk
  * @copyright Copyright (c) 2019 bymayo
@@ -11,6 +11,7 @@
 namespace bymayo\stravasync\variables;
 
 use bymayo\stravasync\StravaSync;
+use craft\helpers\UrlHelper;
 
 use Craft;
 
@@ -28,12 +29,18 @@ class StravaSyncVariable
      * @param null $optional
      * @return string
      */
-    public function exampleVariable($optional = null)
+    public function connected()
     {
-        $result = "And away we go to the Twig template...";
-        if ($optional) {
-            $result = "I'm feeling optional today...";
-        }
-        return $result;
+        return StravaSync::getInstance()->userService->checkUserLinkExists();
+    }
+
+    public function connectUrl()
+    {
+        return UrlHelper::actionUrl('strava-sync/oauth/connect');
+    }
+
+    public function disconnectUrl()
+    {
+        return UrlHelper::actionUrl('strava-sync/user/disconnect');
     }
 }

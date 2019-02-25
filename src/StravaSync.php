@@ -22,9 +22,11 @@ use craft\web\twig\variables\CraftVariable;
 use craft\events\RegisterUrlRulesEvent;
 use craft\helpers\FileHelper;
 use craft\services\Elements;
-use craft\elements\User;
+use craft\elements\User as UserElement;
 
 use yii\base\Event;
+use yii\web\User;
+use yii\web\UserEvent;
 
 /**
  * Class StravaSync
@@ -73,16 +75,18 @@ class StravaSync extends Plugin
         self::$plugin = $this;
 
         $this->setComponents([
-            'oauthSerivce' => \bymayo\stravasync\services\OauthService::class,
-            'requestService' => \bymayo\stravasync\services\RequestService::class,
+            'oauthService' => \bymayo\stravasync\services\OauthService::class,
+            'userService' => \bymayo\stravasync\services\UserService::class,
          ]);
 
         Event::on(
             UrlManager::class,
             UrlManager::EVENT_REGISTER_SITE_URL_RULES,
             function (RegisterUrlRulesEvent $event) {
-                $event->rules['connect'] = 'strava-sync/oauth/connect';
-                $event->rules['register'] = 'strava-sync/oauth/register';
+                $event->rules['strava-sync/oauth/login'] = 'strava-sync/oauth/login';
+                $event->rules['strava-sync/user/register'] = 'strava-sync/user/register';
+                $event->rules['strava-sync/user/disconnect'] = 'strava-sync/user/disconnect';
+                $event->rules['strava-sync/user/connect'] = 'strava-sync/user/connect';
             }
         );
 
@@ -90,8 +94,6 @@ class StravaSync extends Plugin
             UrlManager::class,
             UrlManager::EVENT_REGISTER_CP_URL_RULES,
             function (RegisterUrlRulesEvent $event) {
-                $event->rules['connect'] = 'strava-sync/oauth/connect';
-                $event->rules['register'] = 'strava-sync/oauth/register';
             }
         );
 
@@ -118,11 +120,27 @@ class StravaSync extends Plugin
            Elements::class,
            Elements::EVENT_BEFORE_DELETE_ELEMENT,
            function (Event $event) {
-               if ($event->element instanceof User) {
-                   StravaSync::getInstance()->oauthSerivce->removeUserFromStrava($event->element);
+               if ($event->element instanceof UserElement) {
+                   StravaSync::getInstance()->userService->unlinkUserFromStrava($event->element);
                }
            }
         );
+
+        Event::on(
+            User::class,
+            User::EVENT_AFTER_LOGOUT,
+            function (UserEvent $event) {
+                StravaSync::getInstance()->oauthService->clearToken();
+            }
+        );
+
+        // Event::on(
+        //     User::class,
+        //     User::EVENT_BEFORE_LOGIN,
+        //     function (UserEvent $event) {
+        //         StravaSync::getInstance()->oauthService->clearToken();
+        //     }
+        // );
 
         Craft::info(
             Craft::t(

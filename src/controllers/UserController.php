@@ -22,7 +22,7 @@ use craft\web\twig\variables as Variables;
  * @package   StravaSync
  * @since     1.0.0
  */
-class OauthController extends Controller
+class UserController extends Controller
 {
 
     // Protected Properties
@@ -33,27 +33,30 @@ class OauthController extends Controller
      *         The actions must be in 'kebab-case'
      * @access protected
      */
-    protected $allowAnonymous = ['connect'];
+    protected $allowAnonymous = ['register', 'connect', 'disconnect'];
 
     // Public Methods
     // =========================================================================
 
-    /**
-     * @return mixed
-     */
+    public function actionRegister()
+    {
+        $this->requirePostRequest();
+        $request = Craft::$app->getRequest();
 
-     public function actionConnect()
-     {
+        $emailAddress = $request->getBodyParam('email');
 
-         $connect = StravaSync::getInstance()->oauthService->connect();
+        if (!StravaSync::getInstance()->userService->registerUser($emailAddress)) {
+            StravaSync::getInstance()->userService->_loginFailure();
+            return false;
+        }
 
-         if (!$connect) {
-             StravaSync::getInstance()->oauthService->_authenticateFailure();
-             return false;
-         }
+        return $this->redirect(StravaSync::$plugin->getSettings()->loginRedirect);
+    }
 
-         return $this->redirect($connect);
-
-     }
+    public function actionDisconnect()
+    {
+      StravaSync::getInstance()->userService->disconnect();
+      return $this->redirect('/settings/accounts');
+   }
 
 }
