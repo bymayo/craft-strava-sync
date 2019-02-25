@@ -59,26 +59,26 @@ Because the Strava API doesn't give us access to the authorised users email addr
 Use the `craft.stravaSync.connect` method to output a link that will login and register users at the same time.
 
 ```
-<a href="{{ craft.stravaSync.connect() }}">Login with Strava</a>
+<a href="{{ craft.stravaSync.connectUrl() }}">Login with Strava</a>
 ```
 
 Optionally pass a `redirect` param to the method to overwrite the `Login Redirect` plugin setting, and redirect them when they have successfully logged in:
 
 ```
-<a href="{{ craft.stravaSync.connect({ redirect: '/success'  }) }}">Login with Strava</a>
+<a href="{{ craft.stravaSync.connectUrl({ redirect: '/success'  }) }}">Login with Strava</a>
 ```
 
 ### Disconnect
 When a user is logged in they have the option to disconnect their Strava account from their Craft CMS user:
 
 ```
-<a href="{{ craft.stravaSync.disconnect() }}">Disconnect from Strava</a>
+<a href="{{ craft.stravaSync.disconnectUrl() }}">Disconnect from Strava</a>
 ```
 
 Optionally pass a `redirect` param to the method redirect them after they have disconnected:
 
 ```
-<a href="{{ craft.stravaSync.disconnect({ redirect: '/account'  }) }}">Login with Strava</a>
+<a href="{{ craft.stravaSync.disconnectUrl({ redirect: '/account'  }) }}">Login with Strava</a>
 ```
 
 ### Connected
@@ -86,9 +86,9 @@ When a user is logged in, you might want to check to see if they are connected t
 
 ```
 {% if craft.stravaSync.connected %}
-   <a href="{{ craft.social.craft.stravaSync.disconnect() }}">Disconnect from Strava</a>
+   <a href="{{ craft.stravaSync.disconnectUrl() }}">Disconnect from Strava</a>
 {% else %}
-   <a href="{{ craft.stravaSync.connect() }}">Connect to Strava</a>
+   <a href="{{ craft.stravaSync.connectUrl() }}">Connect to Strava</a>
 {% endif %}
 ```
 
