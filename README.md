@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/bymayo/strava-sync/master/resources/icon.png" width="70">
+<img src="https://raw.githubusercontent.com/bymayo/craft-strava-sync/master/resources/icon.png" width="70">
 
 # Strava Sync Plugin for Craft CMS 3.x
 
