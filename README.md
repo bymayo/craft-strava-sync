@@ -2,17 +2,17 @@
 
 # Strava Sync Plugin for Craft CMS 3.x
 
-Strava Sync is a Craft CMS plugin that lets you connect Strava with Craft CMS. Allowing users to login with Strava oAuth, get data from the API (E.g Athelete, activity, segment and route data) as well as sync data with Craft CMS via Strava webhooks.
+Strava Sync is a Craft CMS plugin that lets you connect Strava with Craft CMS. Allowing users to login with Strava oAuth, get data from the Strava API (E.g Atheletes, activities, segments, routes etc)
 
-https://plugins.craftcms.com/commerce-widgets
+https://plugins.craftcms.com/strava-sync
 
 ## Features
 
 - Login via oAuth
 - Automatically fills profile data (First Name, Last Name, Profile Photo etc)
-- Map additonal athlete data to user fields
-- Pull data from the Strava API
-- Sync data directly in to Craft CMS via Webhooks (Soon)
+- Map additonal athlete data to user fields (City, Country, Sex etc)
+- Get data from the Strava API (Atheletes, activities, segments etc) 
+- Sync data directly in to Craft CMS via Webhooks [Soon]
 
 ## Requirements
 
@@ -21,7 +21,7 @@ https://plugins.craftcms.com/commerce-widgets
 
 ## Install
 
-- Install via the Plugin Store in the Craft Admin CP by searching for `Strava Sync`.
+- Install via the Plugin Store in the Craft Admin CP by searching for `Strava Sync`
 
 OR
 
@@ -31,12 +31,12 @@ OR
 ## Configuration
 
 1. Go to `Settings -> Strava Sync` in Craft CMS.
-2. Create API Application on Strava - https://www.strava.com/settings/api (Ensuring the `Authorization Callback Domain` is the domain your going to be connecting from)
+2. Create an API Application on Strava - https://www.strava.com/settings/api (Ensuring the `Authorization Callback Domain` is the domain your going to be connecting from)
 3. Copy the `Client ID` and `Client Secret` and enter them in to the correct fields in the `Strava Sync` settings.
-4. Also set your `Login Redirect` and `Onboard Redirect` route / paths (See `Onboard` below for an explanation regarding `Onboard Redirect`).
+4. Also, set your `Login Redirect` and `Onboard Redirect` route / paths (See `Onboard` below for an explanation regarding `Onboard Redirect`).
 5. Hit save, and follow the templating instructions.
 
-You can also set plugin settings by creating a `strava-sync.php` file in your `config` folder. See the `config.php` for an example.
+You can also set plugin settings by creating a `strava-sync.php` file in your `config` folder. See the `strava-sync-config.php` for an example.
 
 ## Templating
 
@@ -49,7 +49,7 @@ Because the Strava API doesn't give us access to the authorised users email addr
    {{ getCsrfInput() }}
    {{ actionInput('strava-sync/user/register') }}
 
-   <label for="email"></label>
+   <label for="email">Email Address</label>
    <input type="email" name="email" id="email" required>
 
    <button>Continue</button>
@@ -58,7 +58,7 @@ Because the Strava API doesn't give us access to the authorised users email addr
 ```
 
 ### Connect (Login / Register)
-Use the `craft.stravaSync.connect` method to output a link that will login and register users at the same time.
+Use the `connectUrl` method to register and login a user via Strava oAuth.
 
 ```
 <a href="{{ craft.stravaSync.connectUrl() }}">Login with Strava</a>
@@ -71,20 +71,20 @@ Optionally pass a `redirect` param to the method to overwrite the `Login Redirec
 ```
 
 ### Disconnect
-When a user is logged in they have the option to disconnect their Strava account from their Craft CMS user:
+Use the `disconnectUrl` method to disconnect the current logged in user from Strava and unlink it from their Craft CMS user account:
 
 ```
 <a href="{{ craft.stravaSync.disconnectUrl() }}">Disconnect from Strava</a>
 ```
 
-Optionally pass a `redirect` param to the method redirect them after they have disconnected:
+Optionally pass a `redirect` param to the method redirect the user after they have disconnected:
 
 ```
-<a href="{{ craft.stravaSync.disconnectUrl({ redirect: '/account'  }) }}">Login with Strava</a>
+<a href="{{ craft.stravaSync.disconnectUrl({ redirect: '/account'  }) }}">Disconnect from Strava</a>
 ```
 
 ### Connected
-When a user is logged in, you might want to check to see if they are connected to Strava:
+Use the `connected` method to check to see if the current logged in user has connected their Strava account:
 
 ```
 {% if craft.stravaSync.connected %}
@@ -100,6 +100,9 @@ If you have any issues (Surely not!) then I'll aim to reply to these as soon as 
 
 ## Roadmap
 
-* Release it
+* Webhooks.
+* Ability to set an admin user Strava credentials in the CP.
 
-Brought to you by [bymayo](http://bymayo.co.uk)
+## Credits
+
+Brought to you by [ByMayo](http://bymayo.co.uk)
