@@ -2,7 +2,7 @@
 
 # Strava Sync Plugin for Craft CMS 3.x
 
-Strava Sync is a Craft CMS plugin that lets you connect Strava with Craft CMS. Allowing users to login with Strava oAuth, get data from the Strava API (E.g Athletes, activities, segments, routes etc)
+Strava Sync is a Craft CMS plugin that lets you connect Strava with Craft CMS. Allowing users to login with Strava oAuth, get data from the Strava API (Athletes, activities, segments, routes etc)
 
 https://plugins.craftcms.com/strava-sync
 
