@@ -11,7 +11,7 @@ https://plugins.craftcms.com/strava-sync
 - Login via oAuth
 - Automatically fills profile data (First Name, Last Name, Profile Photo etc)
 - Map additional athlete data to user fields (City, Country, Sex etc)
-- Get data from the Strava API (Athletes, activities, segments etc) 
+- Get data from the Strava API (Athletes, activities, segments etc)
 - Sync data directly in to Craft CMS via Webhooks [Soon]
 
 ## Requirements
@@ -36,7 +36,23 @@ OR
 4. Also, set your `Login Redirect` and `Onboard Redirect` route / paths (See `Onboard` below for an explanation regarding `Onboard Redirect`).
 5. Hit save, and follow the templating instructions.
 
-You can also set plugin settings by creating a `strava-sync.php` file in your `config` folder. See the `strava-sync-config.php` for an example.
+You can also set plugin settings by creating a `strava-sync.php` file in your projects `config` folder. See the `config.php` in this plugin to see all available options.
+
+## Field Mapping
+
+You can map Strava athlete data (`https://www.strava.com/api/v3/athlete`) to user fields once the user has authorised and registered. In your `strava-sync.php` config file add the `fieldMapping` option.
+
+```
+'fieldMapping' => [
+   'username' => 'id',
+   'firstName' => 'firstname',
+   'lastName' => 'lastname',
+   'userGender' => 'sex',
+   'userLocation' => 'country'
+]
+```
+
+The key (E.g. `username`) is the Craft CMS field your mapping to, and the value (e.g. `id`) is the property from the Strava API Athelete GET (`https://www.strava.com/api/v3/athlete`)
 
 ## Templating
 
