@@ -96,7 +96,7 @@ Use the `connected` method to check to see if the current logged in user has con
 
 ## Support
 
-If you have any issues (Surely not!) then I'll aim to reply to these as soon as possible. If it's a site-breaking-oh-no-what-has-happened moment, then hit me up on the Craft CMS Slack - @bymayo
+If you have any issues (Surely not!) then I'll aim to reply to these as soon as possible. If it's a site-breaking-oh-no-what-has-happened moment, then hit me up on the Craft CMS Slack / Discord - @bymayo
 
 ## Roadmap
 
