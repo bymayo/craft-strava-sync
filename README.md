@@ -38,9 +38,11 @@ OR
 
 You can also set plugin settings by creating a `strava-sync.php` file in your projects `config` folder. See the `config.php` in this plugin to see all available options.
 
-## Field Mapping
+## Options
 
-You can map Strava athlete data (`https://www.strava.com/api/v3/athlete`) to user fields once the user has authorised and registered. In your `strava-sync.php` config file add the `fieldMapping` option.
+### Field Mapping
+
+You can map Strava athlete data (`https://www.strava.com/api/v3/athlete`) to user fields once the user has authorised and registered. This can only be done via the `strava-sync.php` config file add the `fieldMapping` option.
 
 ```
 'fieldMapping' => [
@@ -53,6 +55,12 @@ You can map Strava athlete data (`https://www.strava.com/api/v3/athlete`) to use
 ```
 
 The key (E.g. `username`) is the Craft CMS field your mapping to, and the value (e.g. `id`) is the property from the Strava API Athelete GET (`https://www.strava.com/api/v3/athlete`)
+
+### Scope
+
+You may not require access to all Strava data, e.g. You may only require to get an Athletes Details and not upload Activities. To put trust in users authorising your website to connecto their Strava account it's important to choose the correct `scope` value when we make a oAuth call to Strava.
+
+You can see a list of available scope options at https://developers.strava.com/docs/oauth-updates/ under `Details about requesting access`.
 
 ## Templating
 
