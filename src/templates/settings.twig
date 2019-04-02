@@ -51,9 +51,18 @@
 {% endfor %}
 
 {{ forms.selectField({
-     label: "Default User Group"|t('social'),
+     label: "Default User Group",
      instructions: "The user group that Strava members will be added to by default.",
      name: 'defaultUserGroup',
      options: groups,
      value: settings.defaultUserGroup,
  }) }}
+
+ {{ forms.textField({
+     label: 'Scope',
+     id: 'scope',
+     name: 'scope',
+     instructions: "Sets the scope level of authorisation (https://developers.strava.com/docs/authentication/).",
+     required: true,
+     value: settings.scope })
+ }}
