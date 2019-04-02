@@ -45,6 +45,13 @@ class UserController extends Controller
 
         $emailAddress = $request->getBodyParam('email');
 
+        $user = Craft::$app->users->getUserByUsernameOrEmail($emailAddress);
+
+         if ($user) {
+            Craft::$app->getSession()->setError('A user already exists with that email address.');
+            return $this->redirect(StravaSync::$plugin->getSettings()->onboardRedirect);
+         }
+
         if (!StravaSync::getInstance()->userService->registerUser($emailAddress)) {
             StravaSync::getInstance()->userService->_loginFailure();
             return false;

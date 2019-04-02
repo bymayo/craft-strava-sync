@@ -28,6 +28,11 @@ use craft\records\Session;
  */
 class UserService extends Component
 {
+
+   private $_request;
+   private $_athlete;
+   private $_accessToken;
+
     // Public Methods
     // =========================================================================
 
@@ -45,38 +50,50 @@ class UserService extends Component
 
    public function checkAthleteLinkExists()
    {
-      $athlete = StravaSync::getInstance()->oauthService->request()->getAthlete();
-      $athleteRecord = UsersRecord::findOne(['athleteId' => $athlete['id']]);
+
+      // $athlete = StravaSync::getInstance()->oauthService->request()->getAthlete();
+      $athleteRecord = UsersRecord::findOne(['athleteId' => $this->_athlete['id']]);
 
       if ($athleteRecord) {
          return $athleteRecord;
       }
+
    }
 
-   public function postAuthenticateRedirect()
+   public function postAuthenticateRedirect($accessToken)
    {
 
-      $check = $this->checkAthleteLinkExists();
+      $this->_accessToken = $accessToken;
+      $this->_request = StravaSync::getInstance()->oauthService->request($this->_accessToken);
+      $this->_athlete = $this->_request->getAthlete();
+
       $user = Craft::$app->getUser()->getIdentity();
-      $athlete = StravaSync::getInstance()->oauthService->request()->getAthlete();
+      $check = $this->checkAthleteLinkExists();
 
       if ($user && !$check) {
          // Link current user to Strava
-         $this->linkUserToStrava($user->id, $athlete['id']);
+         $this->linkUserToStrava($user->id);
          return '/settings/accounts/';
       }
       elseif(!$user && $check)
       {
          // If user already linked, log them in.
-         if(!$this->loginUser($check->userId)) {
-              $this->_loginFailure();
-              return false;
+         if($this->loginUser($check->userId)) {
+            // $this->updateAccessToken();
+            return StravaSync::$plugin->getSettings()->loginRedirect;
           }
-          return StravaSync::$plugin->getSettings()->loginRedirect;
+
+          $this->_loginFailure();
+          return false;
+
       }
       elseif(!$user && !$check) {
          // If user is not registered, then chuck them to the onboard form
+         Craft::$app->getSession()->set('accessToken', $this->_accessToken);
          return StravaSync::$plugin->getSettings()->onboardRedirect;
+      }
+      else {
+         // Error needs to go here to show that Strava is linked to another account.
       }
 
       Craft::$app->getSession()->setError('stravasync', 'Sorry, but your Strava account is currently linked to another account.');
@@ -84,12 +101,16 @@ class UserService extends Component
 
    }
 
-    public function linkUserToStrava($userId, $athleteId)
+    public function linkUserToStrava($userId)
     {
+
         $record = new UsersRecord();
         $record->userId = $userId;
-        $record->athleteId = $athleteId;
+        $record->athleteId = $this->_athlete['id'];
+        $record->accessToken = $this->_accessToken;
+        $record->refreshToken = null;
         $record->save(true);
+
     }
 
     public function unlinkUserFromStrava($user)
@@ -126,28 +147,30 @@ class UserService extends Component
         return $fields;
     }
 
-    public function loginUser($userId)
-    {
-        $user = Craft::$app->users->getUserById($userId);
-        return Craft::$app->getUser()->login($user);
-    }
+      public function loginUser($userId)
+      {
+
+         $user = Craft::$app->users->getUserById($userId);
+         return Craft::$app->getUser()->login($user);
+
+      }
 
     public function registerUser($emailAddress)
     {
 
-        $athlete = StravaSync::getInstance()->oauthService->request()->getAthlete();
+      $this->_accessToken = StravaSync::getInstance()->oauthService->getAccessTokenSession();
+      $this->_request = StravaSync::getInstance()->oauthService->request($this->_accessToken);
+      $this->_athlete = $this->_request->getAthlete();
 
-        $user = Craft::$app->users->getUserByUsernameOrEmail($emailAddress);
-
-        if ($user) {
-            Craft::$app->getSession()->setError('stravasync', 'A user already exists with that email address.');
-        }
+      // Clear Access Token Session
+      StravaSync::getInstance()->oauthService->clearAccessTokenSession();
 
         $user = new User();
 
-        $user->username = $athlete['username'] . $athlete['id']; // Placed before so it can be overwritten by mapped fields
+        $user->username = $this->_athlete['username'] . $this->_athlete['id']; // Placed before so it can be overwritten by mapped fields
+
         foreach ($this->getFieldMapping() as $key => $value) {
-            $user->{$key} = preg_replace("/[^A-Za-z0-9 ]/", '', $athlete[$value]);
+            $user->{$key} = preg_replace("/[^A-Za-z0-9 ]/", '', $this->_athlete[$value]);
         }
 
         $user->email = $emailAddress;
@@ -164,25 +187,27 @@ class UserService extends Component
       );
 
         // Link with Strava
-        $this->linkUserToStrava($user->id, $athlete['id']);
+        $this->linkUserToStrava($user->id);
 
         // Set User Photo
-        $this->saveProfilePhoto($user, $athlete);
+        $this->saveProfilePhoto($user);
 
         // Activate User
         Craft::$app->users->activateUser($user);
 
         // Login User
         return $this->loginUser($user->id);
+
     }
 
-    public function saveProfilePhoto($user, $athlete)
+    public function saveProfilePhoto($user)
     {
-        $filename = $athlete['id'];
-        $extension = '.jpg';
-        $photoUrl = $athlete['profile'];
 
-        $tempPath = Craft::$app->path->getTempPath() . '/strava-sync/userphotos/' . $athlete['id'] . '/';
+        $filename = $this->_athlete['id'];
+        $extension = '.jpg';
+        $photoUrl = $this->_athlete['profile'];
+
+        $tempPath = Craft::$app->path->getTempPath() . '/strava-sync/userphotos/' . $this->_athlete['id'] . '/';
 
         FileHelper::createDirectory($tempPath);
 
@@ -193,7 +218,7 @@ class UserService extends Component
       ]);
 
         if ($response->getStatusCode() !== 200) {
-            return;
+            return true;
         }
 
         rename($tempPath . $filename, $tempPath . $filename . $extension);
@@ -205,12 +230,14 @@ class UserService extends Component
 
     public function disconnect()
     {
+
       $user = Craft::$app->getUser()->getIdentity();
 
       if ($user) {
          $this->unlinkUserFromStrava($user);
          // return true;
       }
+
     }
 
 }

@@ -55,12 +55,22 @@ class OauthService extends Component
                 exit;
 
             } else {
-               $this->clearToken();
-                $token = $oauth->getAccessToken('authorization_code', [
-                   'code' => $_GET['code']
-               ]);
-                Craft::$app->getSession()->set('token', $token->getToken());
-                return true;
+
+               $this->clearAccessTokenSession();
+
+               $token = $oauth->getAccessToken(
+                  'authorization_code',
+                  [
+                     'code' => $_GET['code']
+                  ]
+               );
+
+               // $tokens = array(
+               //    'accessToken' => $token->getToken(),
+               //    'refreshToken' => $token->getRefreshToken()
+               // );
+
+               return $token->getToken();
 
             }
         } catch (Exception $e) {
@@ -68,28 +78,36 @@ class OauthService extends Component
         }
     }
 
-    public function clearToken()
+    public function clearAccessTokenSession()
     {
-      return Craft::$app->getSession()->remove('token');
+      Craft::$app->getSession()->remove('accessToken');
+      return true;
    }
 
-    public function getToken()
+    public function getAccessTokenSession()
     {
-        return Craft::$app->getSession()->get('token');
+      $accessToken = Craft::$app->getSession()->get('accessToken');
+      $this->clearAccessTokenSession();
+        return $accessToken;
     }
 
-    public function request()
+    public function request($accesToken)
     {
         $adapter = new \GuzzleHttp\Client(['base_uri' => 'https://www.strava.com/api/v3/']);
-        $service = new REST($this->getToken(), $adapter);
+        $service = new REST($accesToken, $adapter);
         return $client = new Client($service);
     }
 
     public function connect()
     {
-      if ($this->authenticate()) {
-         return StravaSync::getInstance()->userService->postAuthenticateRedirect();
+
+      $tokens = $this->authenticate();
+
+      if ($this->authenticate())
+      {
+         return StravaSync::getInstance()->userService->postAuthenticateRedirect($tokens);
       }
+
       exit;
    }
 

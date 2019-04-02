@@ -53,7 +53,7 @@ class StravaSync extends Plugin
     /**
      * @var string
      */
-    public $schemaVersion = '1.0.0';
+    public $schemaVersion = '1.0.1';
 
     // Public Methods
     // =========================================================================
@@ -130,7 +130,7 @@ class StravaSync extends Plugin
             User::class,
             User::EVENT_AFTER_LOGOUT,
             function (UserEvent $event) {
-                StravaSync::getInstance()->oauthService->clearToken();
+                StravaSync::getInstance()->oauthService->clearAccessTokenSession();
             }
         );
 
