@@ -29,9 +29,9 @@ use craft\records\Session;
 class UserService extends Component
 {
 
-   private $_request;
+   private $_requestClient;
    private $_athlete;
-   private $_accessToken;
+   private $_tokens;
 
     // Public Methods
     // =========================================================================
@@ -40,10 +40,10 @@ class UserService extends Component
     {
 
       $user = Craft::$app->getUser()->getIdentity();
-      $athleteRecord = UsersRecord::findOne(['userId' => $user->id]);
+      $userRecord = UsersRecord::findOne(['userId' => $user->id]);
 
-      if ($athleteRecord) {
-         return $athleteRecord;
+      if ($userRecord) {
+         return $userRecord;
       }
 
    }
@@ -51,21 +51,20 @@ class UserService extends Component
    public function checkAthleteLinkExists()
    {
 
-      // $athlete = StravaSync::getInstance()->oauthService->request()->getAthlete();
-      $athleteRecord = UsersRecord::findOne(['athleteId' => $this->_athlete['id']]);
+      $userRecord = UsersRecord::findOne(['athleteId' => $this->_athlete['id']]);
 
-      if ($athleteRecord) {
-         return $athleteRecord;
+      if ($userRecord) {
+         return $userRecord;
       }
 
    }
 
-   public function postAuthenticateRedirect($accessToken)
+   public function postAuthenticateRedirect($tokens)
    {
 
-      $this->_accessToken = $accessToken;
-      $this->_request = StravaSync::getInstance()->oauthService->request($this->_accessToken);
-      $this->_athlete = $this->_request->getAthlete();
+      $this->_tokens = $tokens;
+      $this->_requestClient = StravaSync::getInstance()->oauthService->requestClient($tokens['accessToken']);
+      $this->_athlete = $this->_requestClient->getAthlete();
 
       $user = Craft::$app->getUser()->getIdentity();
       $check = $this->checkAthleteLinkExists();
@@ -79,7 +78,6 @@ class UserService extends Component
       {
          // If user already linked, log them in.
          if($this->loginUser($check->userId)) {
-            // $this->updateAccessToken();
             return StravaSync::$plugin->getSettings()->loginRedirect;
           }
 
@@ -89,14 +87,11 @@ class UserService extends Component
       }
       elseif(!$user && !$check) {
          // If user is not registered, then chuck them to the onboard form
-         Craft::$app->getSession()->set('accessToken', $this->_accessToken);
+         Craft::$app->getSession()->set('tokens', $this->_accessToken);
          return StravaSync::$plugin->getSettings()->onboardRedirect;
       }
-      else {
-         // Error needs to go here to show that Strava is linked to another account.
-      }
 
-      Craft::$app->getSession()->setError('stravasync', 'Sorry, but your Strava account is currently linked to another account.');
+      Craft::$app->getSession()->setError('Your Strava account is linked to another user account.');
       return '/settings/accounts/';
 
    }
@@ -107,8 +102,9 @@ class UserService extends Component
         $record = new UsersRecord();
         $record->userId = $userId;
         $record->athleteId = $this->_athlete['id'];
-        $record->accessToken = $this->_accessToken;
-        $record->refreshToken = null;
+        $record->accessToken = $this->_tokens['accessToken'];
+        $record->refreshToken = $this->_tokens['refreshToken'];
+        $record->expires = $this->_tokens['expires'];
         $record->save(true);
 
     }
@@ -128,7 +124,7 @@ class UserService extends Component
 
     public function _loginFailure()
     {
-        Craft::$app->getSession()->setError('stravasync', 'Sorry, login failed.');
+        Craft::$app->getSession()->setError('Login failed.');
     }
 
     public function getFieldMapping()
@@ -145,25 +141,28 @@ class UserService extends Component
         }
 
         return $fields;
+
     }
 
       public function loginUser($userId)
       {
 
          $user = Craft::$app->users->getUserById($userId);
-         return Craft::$app->getUser()->login($user);
+
+         if (Craft::$app->getUser()->login($user))
+         {
+            StravaSync::getInstance()->oauthService->refreshTokens();
+            return Craft::$app->getUser()->login($user);
+         }
 
       }
 
     public function registerUser($emailAddress)
     {
 
-      $this->_accessToken = StravaSync::getInstance()->oauthService->getAccessTokenSession();
-      $this->_request = StravaSync::getInstance()->oauthService->request($this->_accessToken);
-      $this->_athlete = $this->_request->getAthlete();
-
-      // Clear Access Token Session
-      StravaSync::getInstance()->oauthService->clearAccessTokenSession();
+      $this->_tokens = StravaSync::getInstance()->oauthService->getTokensSession();
+      $this->_requestClient = StravaSync::getInstance()->oauthService->requestClient($this->_tokens['accessToken']);
+      $this->_athlete = $this->_requestClient->getAthlete();
 
         $user = new User();
 

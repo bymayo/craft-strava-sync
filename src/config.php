@@ -20,6 +20,7 @@ return [
       'loginRedirect' => '/',
       'onboardRedirect' => '',
       'defaultUserGroup' => null,
-      'fieldMapping' => []
+      'fieldMapping' => [],
+      'scope' => null
    ]
 ];

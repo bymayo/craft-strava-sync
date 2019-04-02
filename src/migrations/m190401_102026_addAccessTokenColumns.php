@@ -20,7 +20,7 @@ class m190401_102026_addAccessTokenColumns extends Migration
          }
 
          if (!$this->db->columnExists('{{%stravasync_users}}', 'refreshToken')) {
-              $this->addColumn('{{%stravasync_users}}', 'refreshToken', $this->string(255)->after('accessToken'));
+              $this->addColumn('{{%stravasync_users}}', 'refreshToken', $this->string(255)->after('accessToken')->notNull());
          }
 
          return true;

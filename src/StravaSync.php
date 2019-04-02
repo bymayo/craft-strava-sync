@@ -53,7 +53,7 @@ class StravaSync extends Plugin
     /**
      * @var string
      */
-    public $schemaVersion = '1.0.1';
+    public $schemaVersion = '1.0.2';
 
     // Public Methods
     // =========================================================================
@@ -126,19 +126,19 @@ class StravaSync extends Plugin
            }
         );
 
-        Event::on(
-            User::class,
-            User::EVENT_AFTER_LOGOUT,
-            function (UserEvent $event) {
-                StravaSync::getInstance()->oauthService->clearAccessTokenSession();
-            }
-        );
+        // Event::on(
+        //     User::class,
+        //     User::EVENT_AFTER_LOGOUT,
+        //     function (UserEvent $event) {
+        //         StravaSync::getInstance()->oauthService->clearAccessTokenSession();
+        //     }
+        // );
 
         // Event::on(
         //     User::class,
         //     User::EVENT_BEFORE_LOGIN,
         //     function (UserEvent $event) {
-        //         StravaSync::getInstance()->oauthService->clearToken();
+        //         StravaSync::getInstance()->oauthService->clearAccessTokenSession();
         //     }
         // );
 
