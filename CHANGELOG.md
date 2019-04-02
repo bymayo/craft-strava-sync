@@ -1,5 +1,9 @@
 # Strava Sync Changelog
 
+## 1.0.2 - 2019-04-02
+### Added
+- `request` method to pull data from Strava API methods
+
 ## 1.0.1 - 2019-04-02
 ### Added
 - Access Tokens & Refresh Tokens now stored in the DB
