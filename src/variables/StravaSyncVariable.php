@@ -26,9 +26,9 @@ class StravaSyncVariable
     // =========================================================================
 
 
-    public function request($method, $params, $userId = null)
+    public function request($method, $params = null, $userId = null)
     {
-      return $connect = StravaSync::getInstance()->oauthService->request($method, $params, $userId = null);
+      return $connect = StravaSync::getInstance()->oauthService->request($method, $params, $userId);
    }
 
     public function connected()

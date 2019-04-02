@@ -18,6 +18,7 @@ use Strava\API\Service\REST;
 use League\OAuth2\Client\Token\AccessToken;
 
 use bymayo\stravasync\StravaSync;
+use bymayo\stravasync\records\UsersRecord as UsersRecord;
 
 use Craft;
 use craft\base\Component;
@@ -107,14 +108,14 @@ class OauthService extends Component
       ];
 
       $oauth = new Oauth($options);
+      $tokens = $this->getTokens();
 
-      // https://github.com/thephpleague/oauth2-client/issues/594
       $accessToken = new AccessToken(
-         [
-            'access_token' => '06ba89276f82a585a734c2de6881b717e3c3187c',
-            'refresh_token' => '1ebad4774e8af345c593689260a83d9bcc1b7a6b',
-            'expires' => '1554224082'
-         ]
+         array(
+            'access_token' => $tokens['accessToken'],
+            'refresh_token' => $tokens['refreshToken'],
+            'expires' => $tokens['expires']
+         )
       );
 
       if ($accessToken->hasExpired()) {
@@ -132,6 +133,25 @@ class OauthService extends Component
 
    }
 
+   public function getTokens($user = null)
+   {
+      if (!$user)
+      {
+         $user = Craft::$app->getUser()->getIdentity();
+      }
+
+      $userRecord = UsersRecord::findOne(['userId' => $user->id]);
+
+      if ($userRecord) {
+         return array(
+            'accessToken' => $userRecord->accessToken,
+            'refreshToken' => $userRecord->refreshToken,
+            'expires' => $userRecord->expires
+         );
+      }
+
+   }
+
    public function updateTokens($tokens, $user = null)
    {
 
@@ -143,10 +163,10 @@ class OauthService extends Component
       $userRecord = UsersRecord::findOne(['userId' => $user->id]);
 
       if ($userRecord) {
-         $record->accessToken = $tokens['accessToken'];
-         $record->refreshToken = $tokens['refreshToken'];
-         $record->expires = $tokens['expires'];
-         $record->save(true);
+         $userRecord->accessToken = $tokens['accessToken'];
+         $userRecord->refreshToken = $tokens['refreshToken'];
+         $userRecord->expires = $tokens['expires'];
+         $userRecord->save(true);
       }
 
    }
@@ -168,21 +188,27 @@ class OauthService extends Component
 
     }
 
-    public function requestClient($accesToken)
+    public function requestClient($accessToken = null)
     {
 
+      if (!$accessToken) {
+         // @TODO check to see if current users access token has expired, if so refresh it and output here
+         $tokens = $this->getTokens();
+         $accessToken = $tokens['accessToken'];
+      }
+
         $adapter = new \GuzzleHttp\Client(['base_uri' => 'https://www.strava.com/api/v3/']);
-        $service = new REST($accesToken, $adapter);
+        $service = new REST($accessToken, $adapter);
         return $client = new Client($service);
 
     }
 
-    public function request($method, $params, $userId = null)
+    public function request($method, $params, $userId)
     {
 
       $client = $this->requestClient();
-      $client->$method($params);
-      $connect = StravaSync::getInstance()->oauthService->connect();
+      return $client->$method($params);
+
    }
 
     public function connect()
