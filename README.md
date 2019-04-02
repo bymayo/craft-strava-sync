@@ -75,6 +75,9 @@ Because the Strava API doesn't give us access to the authorised users email addr
 
    <label for="email">Email Address</label>
    <input type="email" name="email" id="email" required>
+   {% if craft.app.session.getFlash('error')|length %}
+      {{ craft.app.session.getFlash('error') }}
+   {% endif %}
 
    <button>Continue</button>
 
