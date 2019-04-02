@@ -21,6 +21,6 @@ return [
       'onboardRedirect' => '',
       'defaultUserGroup' => null,
       'fieldMapping' => [],
-      'scope' => null
+      'scope' => 'read_all'
    ]
 ];

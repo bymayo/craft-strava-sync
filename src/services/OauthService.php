@@ -55,14 +55,15 @@ class OauthService extends Component
                 $authUrl = $oauth->getAuthorizationUrl(
                    [
                       'scope' => [
+                           StravaSync::$plugin->getSettings()->scope
                            // 'read',
                            // 'activity:read',
                            // 'activity:write',
                            // 'profile:write',
-                           'read_all',
+                           // 'read_all',
                            // 'activity:read_all',
                            // 'profile:read_all',
-                           // 'view_private',
+                           // 'view_private'
                         ]
                    ]
                 );
@@ -195,7 +196,7 @@ class OauthService extends Component
       }
 
       exit;
-      
+
    }
 
 }

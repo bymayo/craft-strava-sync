@@ -34,6 +34,7 @@ class Settings extends Model
     public $onboardRedirect;
     public $defaultUserGroup;
     public $fieldMapping = null;
+    public $scope = 'read_all';
 
     // Public Methods
     // =========================================================================
@@ -44,7 +45,7 @@ class Settings extends Model
     public function rules()
     {
         return [
-            [['clientId', 'clientSecret', 'loginRedirect', 'onboardRedirect'], 'string'],
+            [['clientId', 'clientSecret', 'loginRedirect', 'onboardRedirect', 'scope'], 'string'],
             [['defaultUserGroup'], 'integer'],
             [['fieldMapping'], 'array']
         ];
