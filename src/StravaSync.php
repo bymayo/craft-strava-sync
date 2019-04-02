@@ -1,12 +1,4 @@
 <?php
-/**
- * Strava Sync plugin for Craft CMS 3.x
- *
- * Connect to Strava with oAuth and sync activities etc to Craft CMS
- *
- * @link      http://bymayo.co.uk
- * @copyright Copyright (c) 2019 bymayo
- */
 
 namespace bymayo\stravasync;
 
@@ -28,31 +20,17 @@ use yii\base\Event;
 use yii\web\User;
 use yii\web\UserEvent;
 
-/**
- * Class StravaSync
- *
- * @author    bymayo
- * @package   StravaSync
- * @since     1.0.0
- *
- * @property  StravaSyncServiceService $stravaSyncService
- */
+
 class StravaSync extends Plugin
 {
     // Static Properties
     // =========================================================================
 
-    /**
-     * @var StravaSync
-     */
     public static $plugin;
 
     // Public Properties
     // =========================================================================
 
-    /**
-     * @var string
-     */
     public $schemaVersion = '1.0.2';
 
     // Public Methods
@@ -65,9 +43,6 @@ class StravaSync extends Plugin
         FileHelper::writeToFile($file, $log, ['append' => true]);
     }
 
-    /**
-     * @inheritdoc
-     */
     public function init()
     {
         parent::init();
@@ -126,22 +101,6 @@ class StravaSync extends Plugin
            }
         );
 
-        // Event::on(
-        //     User::class,
-        //     User::EVENT_AFTER_LOGOUT,
-        //     function (UserEvent $event) {
-        //         StravaSync::getInstance()->oauthService->clearAccessTokenSession();
-        //     }
-        // );
-
-        // Event::on(
-        //     User::class,
-        //     User::EVENT_BEFORE_LOGIN,
-        //     function (UserEvent $event) {
-        //         StravaSync::getInstance()->oauthService->clearAccessTokenSession();
-        //     }
-        // );
-
         Craft::info(
             Craft::t(
                 'strava-sync',
@@ -155,17 +114,12 @@ class StravaSync extends Plugin
     // Protected Methods
     // =========================================================================
 
-    /**
-     * @inheritdoc
-     */
+
     protected function createSettingsModel()
     {
         return new Settings();
     }
 
-    /**
-     * @inheritdoc
-     */
     protected function settingsHtml(): string
     {
         return Craft::$app->view->renderTemplate(

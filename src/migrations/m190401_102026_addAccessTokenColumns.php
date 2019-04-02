@@ -4,14 +4,10 @@ namespace bymayo\stravasync\migrations;
 
 use Craft;
 use craft\db\Migration;
-/**
- * m190401_102026_addAccessTokenColumns migration.
- */
+
 class m190401_102026_addAccessTokenColumns extends Migration
 {
-    /**
-     * @inheritdoc
-     */
+
     public function safeUp()
     {
 
@@ -26,9 +22,6 @@ class m190401_102026_addAccessTokenColumns extends Migration
          return true;
     }
 
-    /**
-     * @inheritdoc
-     */
     public function safeDown()
     {
         echo "m190401_102026_addAccessTokenColumns cannot be reverted.\n";

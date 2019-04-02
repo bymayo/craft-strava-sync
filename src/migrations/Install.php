@@ -1,12 +1,4 @@
 <?php
-/**
- * Strava Sync plugin for Craft CMS 3.x
- *
- * Connect to Strava with oAuth and sync activities etc to Craft CMS
- *
- * @link      http://bymayo.co.uk
- * @copyright Copyright (c) 2019 bymayo
- */
 
 namespace bymayo\stravasync\migrations;
 
@@ -26,17 +18,11 @@ class Install extends Migration
     // Public Properties
     // =========================================================================
 
-    /**
-     * @var string The database driver to use
-     */
     public $driver;
 
     // Public Methods
     // =========================================================================
 
-    /**
-     * @inheritdoc
-     */
     public function safeUp()
     {
         $this->driver = Craft::$app->getConfig()->getDb()->driver;
@@ -51,9 +37,6 @@ class Install extends Migration
         return true;
     }
 
-    /**
-      * @inheritdoc
-      */
     public function safeDown()
     {
         $this->driver = Craft::$app->getConfig()->getDb()->driver;
@@ -65,9 +48,6 @@ class Install extends Migration
     // Protected Methods
     // =========================================================================
 
-    /**
-     * @return bool
-     */
     protected function createTables()
     {
         $tablesCreated = false;
@@ -91,9 +71,6 @@ class Install extends Migration
         return $tablesCreated;
     }
 
-    /**
-     * @return void
-     */
     protected function createIndexes()
     {
         $this->createIndex(
@@ -115,9 +92,6 @@ class Install extends Migration
         }
     }
 
-    /**
-     * @return void
-     */
     protected function addForeignKeys()
     {
         $this->addForeignKey(
@@ -134,16 +108,10 @@ class Install extends Migration
         );
     }
 
-    /**
-     * @return void
-     */
     protected function insertDefaultData()
     {
     }
 
-    /**
-     * @return void
-     */
     protected function removeTables()
     {
         $this->dropTableIfExists('{{%stravasync_users}}');
