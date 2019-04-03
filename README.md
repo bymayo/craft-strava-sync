@@ -68,6 +68,12 @@ You can see a list of available scope options at https://developers.strava.com/d
 
 ## Templating
 
+- Onboard
+- Connect URL (Login / Register)
+- Disconnected URL
+- Connected
+- Request
+
 ### Onboard (Required)
 Because the Strava API doesn't give us access to the authorised users email address, we need to collect this to create a Craft CMS user. This is done by placing the following code on to a template and ensuring this template is the one accessible from the `Onboard Redirect` plugin setting:
 
@@ -88,7 +94,7 @@ Because the Strava API doesn't give us access to the authorised users email addr
 </form>
 ```
 
-### Connect (Login / Register)
+### Connect URL (Login / Register)
 Use the `connectUrl` method to register and login a user via Strava oAuth.
 
 ```
@@ -101,7 +107,7 @@ Optionally pass a `redirect` param to the method to overwrite the `Login Redirec
 <a href="{{ craft.stravaSync.connectUrl({ redirect: '/success'  }) }}">Login with Strava</a>
 ```
 
-### Disconnect
+### Disconnect URL
 Use the `disconnectUrl` method to disconnect the current logged in user from Strava and unlink it from their Craft CMS user account:
 
 ```
@@ -124,6 +130,46 @@ Use the `connected` method to check to see if the current logged in user has con
    <a href="{{ craft.stravaSync.connectUrl() }}">Connect to Strava</a>
 {% endif %}
 ```
+
+### Request
+Use the `request` method to get the authorised users data from Strava. Whether this is the users Activities, Clubs, Profile data etc.
+
+```
+{% set athleteActivities = craft.stravaSync.request(
+   'getAthleteActivities'
+) %}
+
+{% for activity in athleteActivities %}
+   {{ activity.name }} / {{ activity.distance }}<br>
+{% endfor %}
+```
+
+Depending on your scope type when you authorised the account, the supported request types are:
+
+- getAthlete
+- getAthleteClubs
+- getAthleteRoutes
+- getAthleteActivities
+- getAthleteZones
+- getAthleteStarredSegments
+
+- getActivity
+- getActivityComments
+- getActivityKudos
+- getActivityPhotos
+- getActivityZones
+- getActivityLaps
+
+- getGear
+- getClub
+- getRoute
+- getSegment
+- getSegmentLeaderboard
+
+- getStreamsActivity
+- getStreamsEffort
+- getStreamsSegment
+- getStreamsRoute
 
 ## Support
 
