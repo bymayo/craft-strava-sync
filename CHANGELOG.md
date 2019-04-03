@@ -1,5 +1,13 @@
 # Strava Sync Changelog
 
+## 1.0.3 - 2019-04-02
+### Fixed
+- Fixed issue where refresh tokens weren't refreshing and saving correctly on a request
+- Fixed a bug where getting the wrong `_tokens` var
+
+### Changed
+- Added more default scope settings to allow read of all Strava data
+
 ## 1.0.2 - 2019-04-02
 ### Added
 - `request` method to pull data from Strava API methods

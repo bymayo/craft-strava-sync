@@ -43,7 +43,7 @@ class OauthService extends Component
                 $authUrl = $oauth->getAuthorizationUrl(
                    [
                       'scope' => [
-                           StravaSync::$plugin->getSettings()->scope
+                        'read,activity:read,read_all,activity:read_all,profile:read_all'
                            // 'read',
                            // 'activity:read',
                            // 'activity:write',
@@ -95,6 +95,7 @@ class OauthService extends Component
       ];
 
       $oauth = new Oauth($options);
+
       $tokens = $this->getTokens();
 
       $accessToken = new AccessToken(
@@ -107,16 +108,24 @@ class OauthService extends Component
 
       if ($accessToken->hasExpired()) {
 
-         $tokens = $oauth->getAccessToken(
+         $token = $oauth->getAccessToken(
             'refresh_token',
             [
                'refresh_token' => $accessToken->getRefreshToken()
             ]
          );
 
+         $tokens = array(
+            'accessToken' => $token->getToken(),
+            'refreshToken' => $token->getRefreshToken(),
+            'expires' => $token->getExpires()
+         );
+
          $this->updateTokens($tokens);
 
       }
+
+      return true;
 
    }
 
@@ -150,10 +159,13 @@ class OauthService extends Component
       $userRecord = UsersRecord::findOne(['userId' => $user->id]);
 
       if ($userRecord) {
+
          $userRecord->accessToken = $tokens['accessToken'];
          $userRecord->refreshToken = $tokens['refreshToken'];
          $userRecord->expires = $tokens['expires'];
          $userRecord->save(true);
+
+         return true;
       }
 
    }
@@ -178,15 +190,15 @@ class OauthService extends Component
     public function requestClient($accessToken = null)
     {
 
-      if (!$accessToken) {
-         // @TODO check to see if current users access token has expired, if so refresh it and output here
+      if (!$accessToken && $this->refreshTokens())
+      {
          $tokens = $this->getTokens();
          $accessToken = $tokens['accessToken'];
       }
 
-        $adapter = new \GuzzleHttp\Client(['base_uri' => 'https://www.strava.com/api/v3/']);
-        $service = new REST($accessToken, $adapter);
-        return $client = new Client($service);
+      $adapter = new \GuzzleHttp\Client(['base_uri' => 'https://www.strava.com/api/v3/']);
+      $service = new REST($accessToken, $adapter);
+      return $client = new Client($service);
 
     }
 

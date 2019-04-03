@@ -74,7 +74,7 @@ class UserService extends Component
       }
       elseif(!$user && !$check) {
          // If user is not registered, then chuck them to the onboard form
-         Craft::$app->getSession()->set('tokens', $this->_accessToken);
+         Craft::$app->getSession()->set('tokens', $this->_tokens);
          return StravaSync::$plugin->getSettings()->onboardRedirect;
       }
 

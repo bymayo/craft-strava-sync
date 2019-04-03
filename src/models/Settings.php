@@ -18,7 +18,7 @@ class Settings extends Model
     public $onboardRedirect;
     public $defaultUserGroup;
     public $fieldMapping = null;
-    public $scope = 'read_all';
+    public $scope = 'read,activity:read,read_all,activity:read_all,profile:read_all';
 
     // Public Methods
     // =========================================================================
