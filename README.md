@@ -68,7 +68,7 @@ You can see a list of available scope options at https://developers.strava.com/d
 
 ## Templating
 
-- Onboard
+- [#onboard-required](Onboard)
 - Connect URL (Login / Register)
 - Disconnected URL
 - Connected
