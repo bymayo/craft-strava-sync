@@ -179,6 +179,7 @@ If you have any issues (Surely not!) then I'll aim to reply to these as soon as 
 
 * Webhooks.
 * Ability to set an admin user Strava credentials in the CP.
+* Convertors (Distance to mi / km)
 
 ## Credits
 
