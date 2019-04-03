@@ -134,6 +134,8 @@ Use the `connected` method to check to see if the current logged in user has con
 ### Request
 Use the `request` method to get the authorised users data from Strava. Whether this is the users Activities, Clubs, Profile data etc.
 
+NOTE: I would recommend caching this data for X amount of time using Craft `{% cache %}` twig tags. This will reduce the amount of requests to Strava and make templates load better.
+
 ```
 {% set athleteActivities = craft.stravaSync.request(
    'getAthleteActivities'
