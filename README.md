@@ -68,11 +68,11 @@ You can see a list of available scope options at https://developers.strava.com/d
 
 ## Templating
 
-- [#onboard-required](Onboard)
-- Connect URL (Login / Register)
-- Disconnected URL
-- Connected
-- Request
+- [Onboard](#onboard-required)
+- [Connect URL (Login / Register)](#connect-url-login--register)
+- [Disconnected URL](#disconnect-url)
+- [Connected](#connected)
+- [Request](#request)
 
 ### Onboard (Required)
 Because the Strava API doesn't give us access to the authorised users email address, we need to collect this to create a Craft CMS user. This is done by placing the following code on to a template and ensuring this template is the one accessible from the `Onboard Redirect` plugin setting:
