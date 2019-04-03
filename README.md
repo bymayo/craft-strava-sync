@@ -58,7 +58,11 @@ The key (E.g. `username`) is the Craft CMS field your mapping to, and the value 
 
 ### Scope
 
-You may not require access to all Strava data, e.g. You may only require to get an Athletes Details and not upload Activities. To put trust in users authorising your website to connecto their Strava account it's important to choose the correct `scope` value when we make a oAuth call to Strava.
+When you make an oAuth request you need to tell Strava what you require from that user. You may not require access to all of a users Strava data, e.g. You may only require to get an Athletes Details and not their Activities. To put trust in users authorising your website to connec to their Strava account it's important to choose the correct `scope` value when we make a oAuth call to Strava.
+
+The scope setting is a comma seperated list, by default this is:
+
+`read, activity:read, read_all, activity:read_all, profile:read_all`
 
 You can see a list of available scope options at https://developers.strava.com/docs/oauth-updates/ under `Details about requesting access`.
 
