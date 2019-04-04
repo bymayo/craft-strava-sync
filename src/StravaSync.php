@@ -52,6 +52,7 @@ class StravaSync extends Plugin
         $this->setComponents([
             'oauthService' => \bymayo\stravasync\services\OauthService::class,
             'userService' => \bymayo\stravasync\services\UserService::class,
+            'webhookService' => \bymayo\stravasync\services\WebhookService::class,
          ]);
 
         Event::on(
@@ -59,6 +60,7 @@ class StravaSync extends Plugin
             UrlManager::EVENT_REGISTER_SITE_URL_RULES,
             function (RegisterUrlRulesEvent $event) {
                 $event->rules['strava-sync/oauth/login'] = 'strava-sync/oauth/login';
+                $event->rules['strava-sync/webhook/sync'] = 'strava-sync/webhook/sync';
                 $event->rules['strava-sync/user/register'] = 'strava-sync/user/register';
                 $event->rules['strava-sync/user/disconnect'] = 'strava-sync/user/disconnect';
                 $event->rules['strava-sync/user/connect'] = 'strava-sync/user/connect';

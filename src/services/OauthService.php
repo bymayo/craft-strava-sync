@@ -85,7 +85,7 @@ class OauthService extends Component
         }
     }
 
-    public function refreshTokens()
+    public function refreshTokens($userId = null)
     {
 
       $options = [
@@ -96,7 +96,7 @@ class OauthService extends Component
 
       $oauth = new Oauth($options);
 
-      $tokens = $this->getTokens();
+      $tokens = $this->getTokens($userId);
 
       $accessToken = new AccessToken(
          array(
@@ -121,22 +121,24 @@ class OauthService extends Component
             'expires' => $token->getExpires()
          );
 
-         $this->updateTokens($tokens);
+         $this->updateTokens($tokens, $userId);
 
       }
 
-      return true;
+      return $tokens['accessToken'];
 
    }
 
-   public function getTokens($user = null)
+   public function getTokens($userId = null)
    {
-      if (!$user)
+
+      if (!$userId)
       {
          $user = Craft::$app->getUser()->getIdentity();
+         $userId = $user->id;
       }
 
-      $userRecord = UsersRecord::findOne(['userId' => $user->id]);
+      $userRecord = UsersRecord::findOne(['userId' => $userId]);
 
       if ($userRecord) {
          return array(
@@ -148,15 +150,16 @@ class OauthService extends Component
 
    }
 
-   public function updateTokens($tokens, $user = null)
+   public function updateTokens($tokens, $userId = null)
    {
 
-      if (!$user)
+      if (!$userId)
       {
          $user = Craft::$app->getUser()->getIdentity();
+         $userId = $user->id;
       }
 
-      $userRecord = UsersRecord::findOne(['userId' => $user->id]);
+      $userRecord = UsersRecord::findOne(['userId' => $userId]);
 
       if ($userRecord) {
 
@@ -187,13 +190,19 @@ class OauthService extends Component
 
     }
 
-    public function requestClient($accessToken = null)
+    public function requestClient($accessToken = null, $userId = null)
     {
 
-      if (!$accessToken && $this->refreshTokens())
+      if ($userId) {
+
+         $accessToken = $this->refreshTokens($userId);
+
+      }
+      elseif (!$accessToken)
       {
-         $tokens = $this->getTokens();
-         $accessToken = $tokens['accessToken'];
+
+         $accessToken = $this->refreshTokens();
+
       }
 
       $adapter = new \GuzzleHttp\Client(['base_uri' => 'https://www.strava.com/api/v3/']);
@@ -202,10 +211,10 @@ class OauthService extends Component
 
     }
 
-    public function request($method, $params, $userId)
+    public function request($method, $params = null, $userId = null)
     {
 
-      $client = $this->requestClient();
+      $client = $this->requestClient(null, $userId);
       return $client->$method($params);
 
    }

@@ -46,6 +46,15 @@ class UserService extends Component
 
    }
 
+   public function getUserFromAthleteId($athleteId)
+   {
+      $userRecord = UsersRecord::findOne(['athleteId' => $athleteId]);
+
+      if ($userRecord) {
+         return $userRecord;
+      }
+   }
+
    public function postAuthenticateRedirect($tokens)
    {
 
