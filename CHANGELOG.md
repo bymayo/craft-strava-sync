@@ -1,5 +1,12 @@
 # Strava Sync Changelog
 
+## 1.0.4 - 2019-04-03
+### Added
+- Webhook functionality (Alpha)
+
+### Fixed
+- Fixed an issue where refresh tokens were only refreshed for current user.
+
 ## 1.0.3 - 2019-04-02
 ### Fixed
 - Fixed issue where refresh tokens weren't refreshing and saving correctly on a request
