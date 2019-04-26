@@ -1,5 +1,9 @@
 # Strava Sync Changelog
 
+## 1.0.5 - 2019-04-26
+### Fixed
+- Fixed issue where new Strava users produced an error when trying to save profile photos (Because they didn't exist)
+
 ## 1.0.4 - 2019-04-03
 ### Added
 - Webhook functionality (Alpha)

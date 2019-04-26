@@ -202,15 +202,26 @@ class UserService extends Component
         $extension = '.jpg';
         $photoUrl = $this->_athlete['profile'];
 
+        if ($photoUrl == 'avatar/athlete/large.png')
+        {
+           // For new users to Strava there is no avatar, but Strava gives a
+           // URL to an image that doesn't exist. So exit and don't save.
+           return true;
+        }
+
         $tempPath = Craft::$app->path->getTempPath() . '/strava-sync/userphotos/' . $this->_athlete['id'] . '/';
 
         FileHelper::createDirectory($tempPath);
 
         $client = new \GuzzleHttp\Client();
 
-        $response = $client->request('GET', $photoUrl, [
-         'save_to' => $tempPath . $filename
-      ]);
+         $response = $client->request(
+            'GET',
+            $photoUrl,
+            [
+               'save_to' => $tempPath . $filename
+            ]
+         );
 
         if ($response->getStatusCode() !== 200) {
             return true;
