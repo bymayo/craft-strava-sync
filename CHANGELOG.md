@@ -1,5 +1,10 @@
 # Strava Sync Changelog
 
+## 1.0.6 - 2019-05-31
+### Added
+- Table attribute to the users table view to see if user is connected/disconnected from Strava
+- Pane inside a user to see if user is connected/disconnected from Strava and output Athlete ID
+
 ## 1.0.5 - 2019-04-26
 ### Fixed
 - Fixed issue where new Strava users produced an error when trying to save profile photos (Because they didn't exist)

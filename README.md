@@ -12,7 +12,9 @@ https://plugins.craftcms.com/strava-sync
 - Automatically fills profile data (First Name, Last Name, Profile Photo etc)
 - Map additional athlete data to user fields (City, Country, Sex etc)
 - Get data from the Strava API (Athletes, activities, segments etc)
-- Sync data directly in to Craft CMS via Webhooks [Soon]
+- Sync data directly in to Craft CMS via Webhooks
+- Pane inside a user to show athlete data and if connected/disconnected to Strava
+- Table attribute column on 'Users' table, to show if user is connected/disconnected to Strava
 
 ## Requirements
 
@@ -172,6 +174,10 @@ Depending on your scope type when you authorised the account, the supported requ
 - getStreamsEffort
 - getStreamsSegment
 - getStreamsRoute
+
+## Webhooks
+
+@TODO Documentation on this feature. Open issue if any questions.
 
 ## Support
 

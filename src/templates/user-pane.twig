@@ -1,0 +1,39 @@
+{% if user.id == currentUser.id or currentUser.admin %}
+
+   <div class="meta">
+      <h2>Strava</h2>
+      {% set stravaSyncUser = craft.stravaSync.connected(user.id) %}
+      {% if stravaSyncUser %}
+         <div class="data first">
+            <span class="heading">ID</span>
+            <span class="value">
+               <a href="https://strava.com/athletes/{{ stravaSyncUser.athleteId }}" target="_blank">#{{ stravaSyncUser.athleteId }}</a>
+            </span>
+         </div>
+         <div class="data">
+            <span class="heading">Token Expiry</span>
+            <span class="value">{{ stravaSyncUser.expires|datetime('short') }}</span>
+         </div>
+         <div class="data">
+            <span class="heading">
+               {% if user.id == currentUser.id %}
+                  <a href="{{ craft.stravaSync.disconnectUrl() }}" class="btn small delete" title="Disconnect from Strava">Disconnect from Strava</a>
+               {% elseif currentUser.admin %}
+                  <a href="{{ craft.stravaSync.disconnectUrl() }}" class="btn small delete" title="Disconnect from Strava">Disconnect from Strava</a>
+               {% else %}
+                  <div class="btn small disabled">Disconnect from Strava</div>
+               {% endif %}
+            </span>
+         </div>
+      {% else %}
+         <div class="data">
+            {% if user.id == currentUser.id %}
+               <a href="{{ craft.stravaSync.connectUrl() }}" class="btn small submit">Connect to Strava</a>
+            {% else %}
+               <div class="btn small submit disabled">Connect to Strava</div>
+            {% endif %}
+         </div>
+      {% endif %}
+   </div>
+
+{% endif %}

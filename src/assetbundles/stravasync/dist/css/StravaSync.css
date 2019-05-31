@@ -1,11 +1,27 @@
-/**
- * Strava Sync plugin for Craft CMS
- *
- * Strava Sync CSS
- *
- * @author    bymayo
- * @copyright Copyright (c) 2019 bymayo
- * @link      http://bymayo.co.uk
- * @package   StravaSync
- * @since     1.0.0
- */
+.rounded {
+   	border-radius: .25rem;
+}
+
+.font-medium {
+	font-weight: 500;
+}
+
+.text-sm {
+   font-size: .75rem;
+}
+
+.p-2 {
+   padding: 0.3rem 0.5rem;
+}
+
+.text-white {
+   color: #fff;
+}
+
+.bg-strava {
+   background-color: #fc4c02;
+}
+
+.bg-gray-300 {
+   background-color: #e2e8f0;
+}

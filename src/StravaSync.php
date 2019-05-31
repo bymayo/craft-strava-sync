@@ -4,6 +4,7 @@ namespace bymayo\stravasync;
 
 use bymayo\stravasync\variables\StravaSyncVariable;
 use bymayo\stravasync\models\Settings;
+use bymayo\stravasync\assetbundles\stravasync\StravaSyncAsset;
 
 use Craft;
 use craft\base\Plugin;
@@ -12,6 +13,8 @@ use craft\events\PluginEvent;
 use craft\web\UrlManager;
 use craft\web\twig\variables\CraftVariable;
 use craft\events\RegisterUrlRulesEvent;
+use craft\events\RegisterElementTableAttributesEvent;
+use craft\events\SetElementTableAttributeHtmlEvent;
 use craft\helpers\FileHelper;
 use craft\services\Elements;
 use craft\elements\User as UserElement;
@@ -111,6 +114,43 @@ class StravaSync extends Plugin
             ),
             __METHOD__
         );
+
+         Event::on(
+            UserElement::class,
+            UserElement::EVENT_REGISTER_TABLE_ATTRIBUTES,
+            function(RegisterElementTableAttributesEvent $event) {
+               $event->tableAttributes['stravaSync'] = 'Strava';
+            }
+         );
+
+         Event::on(
+            UserElement::class,
+            UserElement::EVENT_SET_TABLE_ATTRIBUTE_HTML,
+            function(SetElementTableAttributeHtmlEvent $event) {
+               if ($event->attribute === 'stravaSync') {
+                  Craft::$app->getView()->registerAssetBundle(StravaSyncAsset::class);
+                  $user = $event->sender;
+                  $userConnected = StravaSync::getInstance()->userService->checkUserLinkExists($user->id);
+                  $event->html = Craft::$app->getView()->renderTemplate(
+                     'strava-sync/table-attribute',
+                     [
+                        'status' => $userConnected,
+                     ]
+                  );
+               }
+            }
+         );
+
+         Craft::$app->getView()->hook(
+            'cp.users.edit.details',
+            function(&$context) {
+               if ($context['user'] && $context['user']->id) {
+                  Craft::$app->getView()->registerAssetBundle(StravaSyncAsset::class);
+                  return Craft::$app->getView()->renderTemplate('strava-sync/user-pane', $context);
+               }
+            }
+         );
+
     }
 
     // Protected Methods

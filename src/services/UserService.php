@@ -23,11 +23,16 @@ class UserService extends Component
     // Public Methods
     // =========================================================================
 
-    public function checkUserLinkExists()
+    public function checkUserLinkExists($userId)
     {
 
-      $user = Craft::$app->getUser()->getIdentity();
-      $userRecord = UsersRecord::findOne(['userId' => $user->id]);
+      if (!$userId)
+      {
+         $user = Craft::$app->getUser()->getIdentity();
+         $userId = $user->id;
+      }
+      
+      $userRecord = UsersRecord::findOne(['userId' => $userId]);
 
       if ($userRecord) {
          return $userRecord;
