@@ -18,7 +18,7 @@ class StravaSyncVariable
       return $connect = StravaSync::getInstance()->oauthService->request($method, $params, $userId);
    }
 
-    public function connected($userId)
+    public function connected($userId = null)
     {
         return StravaSync::getInstance()->userService->checkUserLinkExists($userId);
     }

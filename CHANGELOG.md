@@ -1,5 +1,9 @@
 # Strava Sync Changelog
 
+## 1.0.7 - 2019-05-31
+### Fixed
+- Error where no userId was defined when checking to see if user connected to Strava
+
 ## 1.0.6 - 2019-05-31
 ### Added
 - Table attribute to the users table view to see if user is connected/disconnected from Strava
