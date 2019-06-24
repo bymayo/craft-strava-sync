@@ -61,6 +61,9 @@ class Install extends Migration
                     'id' => $this->primaryKey(),
                     'userId' => $this->integer()->notNull(),
                     'athleteId' => $this->string(255)->notNull(),
+                    'accessToken' => $this->string(255)->notNull(),
+                    'refreshToken' => $this->string(255)->notNull(),
+                    'expires' => $this->integer()->notNull(),
                     'dateCreated' => $this->dateTime()->notNull(),
                     'dateUpdated' => $this->dateTime()->notNull(),
                     'uid' => $this->uid()

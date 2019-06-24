@@ -1,5 +1,9 @@
 # Strava Sync Changelog
 
+## 1.0.8 - 2019-06-24
+### Fixed
+- Issue where accessToken, refreshToken and expires column weren't being created on fresh installs.
+
 ## 1.0.7 - 2019-05-31
 ### Fixed
 - Error where no userId was defined when checking to see if user connected to Strava
