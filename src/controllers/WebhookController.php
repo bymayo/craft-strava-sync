@@ -56,7 +56,7 @@ class WebhookController extends Controller
                 if ($requestBody['aspect_type'] == 'create' && $requestBody['object_type'] == 'activity')
                 {
                    // Sync to Events Module
-                   EventsModule::getInstance()->events->sync($requestBody, $user->userId);
+                   EventsModule::getInstance()->events->sync($user, $requestBody);
                    return true;
 
                 }

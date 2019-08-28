@@ -1,5 +1,9 @@
 # Strava Sync Changelog
 
+## 1.0.9 - 2019-08-28
+### Fixed
+- Issue where webhook pulled in the userId, not the user element.
+
 ## 1.0.8 - 2019-06-24
 ### Fixed
 - Issue where accessToken, refreshToken and expires column weren't being created on fresh installs.
