@@ -4,15 +4,54 @@ namespace bymayo\stravasync\services;
 
 use bymayo\stravasync\StravaSync;
 use bymayo\stravasync\records\UsersRecord as UsersRecord;
+use bymayo\stravasync\events\WebhookSyncEvent;
 
 use Craft;
 use craft\base\Component;
 
+use yii\helpers\Json;
+
 class WebhookService extends Component
 {
 
+    // Constants
+    // =========================================================================
+
+   const EVENT_WEBHOOK_SYNC = 'webhookSync';
+
     // Public Methods
     // =========================================================================
+
+    public function sync($request)
+    {
+
+        $requestAsJson = Json::decode($request->getRawBody());
+
+        $athlete = StravaSync::getInstance()->userService->getUserFromAthleteId($requestAsJson['owner_id']);
+
+        if ($athlete){
+
+          if ($this->hasEventHandlers(self::EVENT_WEBHOOK_SYNC)) {
+
+             $this->trigger(
+                self::EVENT_WEBHOOK_SYNC, 
+                new WebhookSyncEvent(
+                   [
+                      'athlete' => $athlete,
+                      'request' => $requestAsJson
+                   ]
+                )
+             );
+
+          }
+
+          return true;
+
+        }
+
+        return false;
+
+    }
 
     public function splitString($string)
     {

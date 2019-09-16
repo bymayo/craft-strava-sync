@@ -6,6 +6,14 @@ Strava Sync is a Craft CMS plugin that lets you connect Strava with Craft CMS. A
 
 https://plugins.craftcms.com/strava-sync
 
+- [Features](#features)
+- [Requirements](#requirements)
+- [Install](#install)
+- [Configuration](#configuration)
+- [Options](#options)
+- [Webhooks](#webhooks)
+- [Support](#support)
+
 ## Features
 
 - Login via oAuth
@@ -177,7 +185,32 @@ Depending on your scope type when you authorised the account, the supported requ
 
 ## Webhooks
 
-@TODO Documentation on this feature. Open issue if any questions.
+If you want to receive data from the Strava Webhook Events API (https://developers.strava.com/docs/webhooks/) when an activity/athlete is created or updated for example, you can use the plugins `webhookSync` event. 
+
+To initally set this up, you need to request Webhook access from Strava (See _Webhooks Overview_ on https://developers.strava.com/docs/webhooks). Strava will then enable your account to access the Webhooks feature.
+
+Next, you need to create a _Webhook Subscription_ by doing a POST request to the Strava Sync webhook controller (`http://website.com/strava-sync/webhook/sync`) with a Bearer Token and `client_id`, `client_secret`, `verify_token`, `callback_url` parameters (The `callback_url` should be the same as the POST request URL)
+
+This will then return a callback validation. If this is successful you will get back an `id` (It's worth making note of this to view/delete the subscription during your project developement)
+
+Once the subscription has been created, you can now use the `webhookSync` event. So whenever an activity/athlete is created, edited or deleted on Strava you can get data back from it for your own plugin/module:
+
+      use bymayo\stravasync\events\WebhookSyncEvent;
+      use bymayo\stravasync\services\WebhookService;
+      use yii\base\Event;
+
+      Event::on(
+         WebhookService::class,
+         WebhookService::EVENT_WEBHOOK_SYNC,
+         function(WebhookSyncEvent $event) {
+            // Do something
+         }
+      );
+
+The `$event` returns an `$event->athlete` and `$event->request` property. 
+
+The `$event->athlete` property contains the `userId`, `athleteId` and `accessToken` of the validated Strava user.
+The `$event->request` property contains all `Event` data from the Strava Webhook e.g. `object_type` which is either athlete, or activity aswell as `aspect_type` which returns whether it's new, updated etc (See `Event Data` on https://developers.strava.com/docs/webhooks/)
 
 ## Support
 
@@ -185,7 +218,6 @@ If you have any issues (Surely not!) then I'll aim to reply to these as soon as 
 
 ## Roadmap
 
-* Webhooks.
 * Ability to set an admin user Strava credentials in the CP.
 * Convertors (Distance to mi / km)
 

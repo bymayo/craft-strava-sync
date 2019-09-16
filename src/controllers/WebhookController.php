@@ -4,7 +4,6 @@ namespace bymayo\stravasync\controllers;
 
 use bymayo\stravasync\StravaSync;
 use bymayo\stravasync\services\OauthService;
-use modules\eventsmodule\EventsModule as EventsModule;
 
 use Craft;
 use craft\web\Controller;
@@ -47,23 +46,7 @@ class WebhookController extends Controller
         }
         else {
 
-             $requestBody = Json::decode($request->getRawBody());
-
-             $user = StravaSync::getInstance()->userService->getUserFromAthleteId($requestBody['owner_id']);
-
-             if ($user){
-
-                if ($requestBody['aspect_type'] == 'create' && $requestBody['object_type'] == 'activity')
-                {
-                   // Sync to Events Module
-                   EventsModule::getInstance()->events->sync($user, $requestBody);
-                   return true;
-
-                }
-
-             }
-
-             return false;
+            StravaSync::getInstance()->webhookService->sync($request);
 
         }
 

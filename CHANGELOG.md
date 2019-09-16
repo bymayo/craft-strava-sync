@@ -1,5 +1,9 @@
 # Strava Sync Changelog
 
+## 1.0.10 - 2019-09-16
+### Added
+- Ability to get data from Strava webhooks, and sync with custom plugins via new `webhookSync` event
+
 ## 1.0.9 - 2019-08-28
 ### Fixed
 - Issue where webhook pulled in the userId, not the user element.
