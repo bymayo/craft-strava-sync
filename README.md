@@ -4,14 +4,16 @@
 
 Strava Sync is a Craft CMS plugin that lets you connect Strava with Craft CMS. Allowing users to login with Strava oAuth, get data from the Strava API (Athletes, activities, segments, routes etc)
 
-https://plugins.craftcms.com/strava-sync
+🛒 Buy on the Plugin Store - https://plugins.craftcms.com/strava-sync
+
+## The Plugin
 
 - [Features](#features)
 - [Requirements](#requirements)
 - [Install](#install)
 - [Configuration](#configuration)
 - [Options](#options)
-- [Webhooks](#webhooks)
+- [Events](#events)
 - [Support](#support)
 
 ## Features
@@ -183,9 +185,43 @@ Depending on your scope type when you authorised the account, the supported requ
 - getStreamsSegment
 - getStreamsRoute
 
-## Webhooks
+## Events
 
-If you want to receive data from the Strava Webhook Events API (https://developers.strava.com/docs/webhooks/) when an activity/athlete is created or updated for example, you can use the plugins `webhookSync` event. 
+### Connected Event
+
+To recieve data when a user connects their Strava account to Craft, use the `EVENT_USER_CONNECTED` event. This returns `$event->user`:
+
+   use bymayo\stravasync\events\UserConnectedEvent;
+   use bymayo\stravasync\services\UserService;
+   use yii\base\Event;
+
+   Event::on(
+      UserService::class,
+      UserService::EVENT_USER_CONNECTED,
+      function(UserConnectedEvent $event) {
+         // Do something
+      }
+   );
+
+### Disconnected Event
+
+To recieve data when a user disconnects their Strava account to Craft, use the `EVENT_USER_DISCONNECTED` event. This returns `$event->user`:
+
+   use bymayo\stravasync\events\userDisconnectedEvent;
+   use bymayo\stravasync\services\UserService;
+   use yii\base\Event;
+
+   Event::on(
+      UserService::class,
+      UserService::EVENT_USER_DISCONNECTED,
+      function(userDisconnectedEvent $event) {
+         // Do something
+      }
+   );
+
+### Webhook Event
+
+If you want to receive data from the Strava Webhook Events API (https://developers.strava.com/docs/webhooks/) when an activity/athlete is created or updated for example, you can use the plugins `EVENT_WEBHOOK_SYNC` event. 
 
 To initally set this up, you need to request Webhook access from Strava (See _Webhooks Overview_ on https://developers.strava.com/docs/webhooks). Strava will then enable your account to access the Webhooks feature.
 

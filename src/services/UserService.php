@@ -4,6 +4,8 @@ namespace bymayo\stravasync\services;
 
 use bymayo\stravasync\StravaSync;
 use bymayo\stravasync\records\UsersRecord as UsersRecord;
+use bymayo\stravasync\events\UserConnectedEvent;
+use bymayo\stravasync\events\UserDisconnectedEvent;
 
 use Craft;
 use craft\base\Component;
@@ -15,6 +17,15 @@ use craft\records\Session;
 
 class UserService extends Component
 {
+
+    // Constants
+    // =========================================================================
+
+    const EVENT_USER_CONNECTED = 'userConnected';
+    const EVENT_USER_DISCONNECTED = 'userDisconnected';
+
+    // Private Vars
+    // =========================================================================
 
    private $_requestClient;
    private $_athlete;
@@ -100,6 +111,8 @@ class UserService extends Component
     public function linkUserToStrava($userId)
     {
 
+       $user = Craft::$app->users->getUserById($userId);
+
         $record = new UsersRecord();
         $record->userId = $userId;
         $record->athleteId = $this->_athlete['id'];
@@ -107,6 +120,19 @@ class UserService extends Component
         $record->refreshToken = $this->_tokens['refreshToken'];
         $record->expires = $this->_tokens['expires'];
         $record->save(true);
+
+        if ($this->hasEventHandlers(self::EVENT_USER_CONNECTED)) {
+
+         $this->trigger(
+            self::EVENT_USER_CONNECTED, 
+            new UserConnectedEvent(
+               [
+                  'user' => $user
+               ]
+            )
+         );
+
+       }
 
     }
 
@@ -116,7 +142,22 @@ class UserService extends Component
         $athleteRecord = UsersRecord::findOne(['userId' => $user->id]);
 
         if ($athleteRecord) {
+
             $athleteRecord->delete();
+
+            if ($this->hasEventHandlers(self::EVENT_USER_DISCONNECTED)) {
+
+               $this->trigger(
+                  self::EVENT_USER_DISCONNECTED, 
+                  new UserDisconnectedEvent(
+                     [
+                        'user' => $user
+                     ]
+                  )
+               );
+   
+            }
+
         }
 
         return false;
@@ -245,8 +286,9 @@ class UserService extends Component
       $user = Craft::$app->getUser()->getIdentity();
 
       if ($user) {
+
          $this->unlinkUserFromStrava($user);
-         // return true;
+
       }
 
     }

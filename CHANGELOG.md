@@ -1,8 +1,12 @@
 # Strava Sync Changelog
 
+## 1.0.11 - 2019-09-17
+### Added
+- Added `EVENT_USER_CONNECTED` and `EVENT_USER_DISCONNECTED` events to check if a user has connected/disconnected Strava from Craft CMS.
+
 ## 1.0.10 - 2019-09-16
 ### Added
-- Ability to get data from Strava webhooks, and sync with custom plugins via new `webhookSync` event
+- Ability to get data from Strava webhooks, and sync with custom plugins via new `EVENT_WEBHOOK_SYNC` event.
 
 ## 1.0.9 - 2019-08-28
 ### Fixed
