@@ -191,33 +191,33 @@ Depending on your scope type when you authorised the account, the supported requ
 
 To recieve data when a user connects their Strava account to Craft, use the `EVENT_USER_CONNECTED` event. This returns `$event->user`:
 
-   use bymayo\stravasync\events\UserConnectedEvent;
-   use bymayo\stravasync\services\UserService;
-   use yii\base\Event;
+      use bymayo\stravasync\events\UserConnectedEvent;
+      use bymayo\stravasync\services\UserService;
+      use yii\base\Event;
 
-   Event::on(
-      UserService::class,
-      UserService::EVENT_USER_CONNECTED,
-      function(UserConnectedEvent $event) {
-         // Do something
-      }
-   );
+      Event::on(
+         UserService::class,
+         UserService::EVENT_USER_CONNECTED,
+         function(UserConnectedEvent $event) {
+            // Do something
+         }
+      );
 
 ### Disconnected Event
 
 To recieve data when a user disconnects their Strava account to Craft, use the `EVENT_USER_DISCONNECTED` event. This returns `$event->user`:
 
-   use bymayo\stravasync\events\userDisconnectedEvent;
-   use bymayo\stravasync\services\UserService;
-   use yii\base\Event;
+      use bymayo\stravasync\events\userDisconnectedEvent;
+      use bymayo\stravasync\services\UserService;
+      use yii\base\Event;
 
-   Event::on(
-      UserService::class,
-      UserService::EVENT_USER_DISCONNECTED,
-      function(userDisconnectedEvent $event) {
-         // Do something
-      }
-   );
+      Event::on(
+         UserService::class,
+         UserService::EVENT_USER_DISCONNECTED,
+         function(userDisconnectedEvent $event) {
+            // Do something
+         }
+      );
 
 ### Webhook Event
 
