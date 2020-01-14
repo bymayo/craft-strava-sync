@@ -8,6 +8,9 @@ use Strava\API\Exception;
 use Strava\API\Service\REST;
 
 use League\OAuth2\Client\Token\AccessToken;
+use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
+
+use Iamstuartwilson\StravaApi;
 
 use bymayo\stravasync\StravaSync;
 use bymayo\stravasync\records\UsersRecord as UsersRecord;
@@ -28,39 +31,50 @@ class OauthService extends Component
 
     public function authenticate()
     {
-        try {
 
-            $options = [
-               'clientId'     => StravaSync::$plugin->getSettings()->clientId,
-               'clientSecret' => StravaSync::$plugin->getSettings()->clientSecret,
-               'redirectUri'  => UrlHelper::actionUrl('strava-sync/oauth/connect')
-           ];
+         $options = [
+            'clientId'     => StravaSync::$plugin->getSettings()->clientId,
+            'clientSecret' => StravaSync::$plugin->getSettings()->clientSecret,
+            'redirectUri'  => UrlHelper::actionUrl('strava-sync/oauth/connect')
+         ];
 
-            $oauth = new Oauth($options);
+         $oauth = new Oauth($options);
 
-            if (!isset($_GET['code'])) {
+         if (!isset($_GET['code'])) {
 
-                $authUrl = $oauth->getAuthorizationUrl(
-                   [
-                      'scope' => [
-                        'read,activity:read,read_all,activity:read_all,profile:read_all'
-                           // 'read',
-                           // 'activity:read',
-                           // 'activity:write',
-                           // 'profile:write',
-                           // 'read_all',
-                           // 'activity:read_all',
-                           // 'profile:read_all',
-                           // 'view_private'
-                        ]
-                   ]
-                );
+               $authUrl = $oauth->getAuthorizationUrl(
+                  [
+                     'scope' => [
+                     'read,read_all,profile:read_all,activity:read,activity:read_all'
+                        // 'read',
+                        // 'read_all',
+                        // 'profile:read_all',
+                        // 'profile:write',
+                        // 'activity:read',
+                        // 'activity:read_all',
+                        // 'activity:write',
+                        // 'view_private'
+                     ]
+                  ]
+               );
 
-                $_SESSION['oauth2state'] = $oauth->getState();
-                header('Location: ' . $authUrl);
-                exit;
+               $_SESSION['oauth2state'] = $oauth->getState();
 
-            } else {
+               header('Location: ' . $authUrl);
+
+               exit;
+
+         } elseif (empty($_GET['state']) || (isset($_SESSION['oauth2state']) && $_GET['state'] !== $_SESSION['oauth2state'])) {
+
+            if (isset($_SESSION['oauth2state'])) {
+               unset($_SESSION['oauth2state']);
+            }
+            
+            exit('Invalid state');
+
+         } else {
+
+            try {
 
                $this->clearTokensSession();
 
@@ -78,11 +92,16 @@ class OauthService extends Component
                );
 
                return $tokens;
+            
+            } catch (IdentityProviderException $e) {
 
+               exit($e->getMessage());
+      
             }
-        } catch (Exception $e) {
-            print $e->getMessage();
-        }
+            
+
+         }
+
     }
 
     public function refreshTokens($userId = null)
@@ -224,7 +243,7 @@ class OauthService extends Component
 
       $tokens = $this->authenticate();
 
-      if ($this->authenticate())
+      if ($tokens)
       {
          return StravaSync::getInstance()->userService->postAuthenticateRedirect($tokens);
       }

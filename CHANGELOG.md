@@ -1,5 +1,9 @@
 # Strava Sync Changelog
 
+## 1.0.12 - 2020-01-14
+### Fixed
+- Error where authorization_code was expiring instantly. Strava must have changed some security settings with authorization_code and tokens.
+
 ## 1.0.11 - 2019-09-17
 ### Added
 - Added `EVENT_USER_CONNECTED` and `EVENT_USER_DISCONNECTED` events to check if a user has connected/disconnected Strava from Craft CMS.
