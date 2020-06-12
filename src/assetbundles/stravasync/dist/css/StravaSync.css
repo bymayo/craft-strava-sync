@@ -1,5 +1,5 @@
 .rounded {
-   	border-radius: .25rem;
+   border-radius: .25rem;
 }
 
 .font-medium {
@@ -24,4 +24,9 @@
 
 .bg-gray-300 {
    background-color: #e2e8f0;
+}
+
+#details .meta.follow-user-pane {
+   padding-top: 14px;
+   padding-bottom: 14px;
 }

@@ -1,5 +1,9 @@
 # Strava Sync Changelog
 
+## 1.0.13 - 2020-06-12
+### Fixed
+- Styling issues on Craft 3.4
+
 ## 1.0.12 - 2020-01-14
 ### Fixed
 - Error where authorization_code was expiring instantly. Strava must have changed some security settings with authorization_code and tokens.
