@@ -18,7 +18,7 @@ Strava Sync is a Craft CMS plugin that lets you connect Strava with Craft CMS. A
 
 ## Documentation
 
-*[View Strava Sync Documentation](https://plugins.bymayo.co.uk/strava-sync/)*
+__[View Strava Sync Documentation](https://plugins.bymayo.co.uk/strava-sync/)__
 
 ## Support
 
