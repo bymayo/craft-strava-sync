@@ -2,7 +2,7 @@
 
 ## 1.0.14 - 2020-10-30
 ### Fixed
-- Composer 2 Compatability
+- Composer 2 Compatibility
 - Disabled CSRF validation for Webhook controller
 - Disabled CSRF validation for oAuth controller
 - Disabled CSRF validation for Register / Disconect controller
