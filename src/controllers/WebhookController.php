@@ -16,6 +16,11 @@ use yii;
 class WebhookController extends Controller
 {
 
+    // Public Properties
+    // =========================================================================
+
+    public $enableCsrfValidation = false;
+
     // Protected Properties
     // =========================================================================
 

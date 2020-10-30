@@ -12,6 +12,11 @@ use craft\web\twig\variables as Variables;
 class UserController extends Controller
 {
 
+    // Public Properties
+    // =========================================================================
+
+    public $enableCsrfValidation = false;
+
     // Protected Properties
     // =========================================================================
 

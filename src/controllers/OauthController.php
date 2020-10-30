@@ -11,6 +11,11 @@ use craft\web\twig\variables as Variables;
 
 class OauthController extends Controller
 {
+    
+    // Public Properties
+    // =========================================================================
+
+    public $enableCsrfValidation = false;
 
     // Protected Properties
     // =========================================================================

@@ -1,5 +1,11 @@
 # Strava Sync Changelog
 
+## 1.0.14 - 2020-10-30
+### Fixed
+- Disabled CSRF validation for Webhook controller
+- Disabled CSRF validation for oAuth controller
+- Disabled CSRF validation for Register / Disconect controller
+
 ## 1.0.13 - 2020-06-12
 ### Fixed
 - Styling issues on Craft 3.4
