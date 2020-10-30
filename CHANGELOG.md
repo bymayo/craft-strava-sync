@@ -1,14 +1,14 @@
 # Strava Sync Changelog
 
-## 1.0.15 - 2020-10-30
-### Updated
-- Composer dependencies
-
 ## 1.0.14 - 2020-10-30
 ### Fixed
+- Composer 2 Compatability
 - Disabled CSRF validation for Webhook controller
 - Disabled CSRF validation for oAuth controller
 - Disabled CSRF validation for Register / Disconect controller
+
+### Updated
+- Composer dependencies
 
 ## 1.0.13 - 2020-06-12
 ### Fixed
