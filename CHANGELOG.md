@@ -1,5 +1,9 @@
 # Strava Sync Changelog
 
+## 1.0.16 - 2020-11-11
+### Fixed
+- References to asset bundle
+
 ## 1.0.15 - 2020-11-11
 ### Fixed
 - Loading asset bundle

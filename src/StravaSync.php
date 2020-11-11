@@ -4,7 +4,7 @@ namespace bymayo\stravasync;
 
 use bymayo\stravasync\variables\StravaSyncVariable;
 use bymayo\stravasync\models\Settings;
-use bymayo\stravasync\assetbundles\stravasync\StravaSyncAsset;
+use bymayo\stravasync\assetbundles\StravaSync\StravaSyncAsset;
 
 use Craft;
 use craft\base\Plugin;
