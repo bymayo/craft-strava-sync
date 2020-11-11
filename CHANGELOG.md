@@ -1,5 +1,9 @@
 # Strava Sync Changelog
 
+## 1.0.15 - 2020-11-11
+### Fixed
+- Loading asset bundle
+
 ## 1.0.14 - 2020-10-30
 ### Fixed
 - Composer 2 Compatibility

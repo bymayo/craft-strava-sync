@@ -13,7 +13,7 @@ class StravaSyncAsset extends AssetBundle
     
     public function init()
     {
-        $this->sourcePath = "@bymayo/stravasync/assetbundles/stravasync/dist";
+        $this->sourcePath = "@bymayo/stravasync/assetbundles/StravaSync/dist";
 
         $this->depends = [
             CpAsset::class,
