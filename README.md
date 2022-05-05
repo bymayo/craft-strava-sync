@@ -1,3 +1,5 @@
+> ⚠️ Deprecated - This Craft CMS 3.x plugin is no longer supported and won't be upgraded to later versions of Craft CMS.
+
 <img src="https://raw.githubusercontent.com/bymayo/craft-strava-sync/master/resources/icon.png" width="70">
 
 # Strava Sync Plugin for Craft CMS 3.x
